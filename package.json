@@ -9,7 +9,7 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "build": "tsc -b",
+    "build": "tsc -b && pnpm run build:vscode",
     "clean": "tsc -b --clean",
     "typecheck": "tsc -b",
     "lint": "biome lint .",

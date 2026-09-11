@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeAll } from "vitest";
 import fs from "node:fs/promises";
 import path from "node:path";
 
@@ -37,6 +37,16 @@ import { getActiveRepository, type VSCodeGitAPI } from "../../apps/vscode/src/gi
 
 describe("VS Code Extension (@gitwhisper/vscode)", () => {
   const extensionDir = path.resolve(__dirname, "../../apps/vscode");
+
+  beforeAll(async () => {
+    const bundlePath = path.join(extensionDir, "dist/extension.js");
+    try {
+      await fs.stat(bundlePath);
+    } catch {
+      const { execSync } = await import("node:child_process");
+      execSync("node esbuild.mjs", { cwd: extensionDir, stdio: "pipe" });
+    }
+  });
 
   it("declares standard SCM title bar and input box contributes menus in package.json", async () => {
     const pkgRaw = await fs.readFile(path.join(extensionDir, "package.json"), "utf8");
