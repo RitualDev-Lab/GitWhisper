@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import fs from "node:fs/promises";
 import { runGit } from "@gitwhisper/git";
 import {
   createGitWhisper,
@@ -26,7 +27,9 @@ describe("Phase 12 — Reusable Core SDK (@gitwhisper/core)", () => {
   it("initializes GitWhisper client on a valid repository", async () => {
     const client = await createGitWhisper({ repository: repo.path });
     expect(client).toBeDefined();
-    expect(client.repository).toBe(repo.path);
+    const actualRepo = await fs.realpath(client.repository);
+    const expectedRepo = await fs.realpath(repo.path);
+    expect(actualRepo).toBe(expectedRepo);
 
     const status = await client.getRepositoryStatus();
     expect(status.hasStagedChanges).toBe(false);

@@ -12,7 +12,8 @@ export interface TempRepo {
 }
 
 export async function createTempGitRepo(prefix = "gitwhisper-test-"): Promise<TempRepo> {
-  const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), prefix));
+  const rawDir = await fs.mkdtemp(path.join(os.tmpdir(), prefix));
+  const tmpDir = await fs.realpath(rawDir);
 
   // Initialize git repository
   await runGit(["init", "-b", "main"], { cwd: tmpDir });
