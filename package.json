@@ -1,0 +1,30 @@
+{
+  "name": "gitwhisper-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "AI-assisted Git commit intelligence tool by RitualDev",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "tsc -b --clean",
+    "typecheck": "tsc -b",
+    "lint": "biome lint .",
+    "format:check": "biome format .",
+    "format": "biome format --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:qs": "npx tsx scripts/qs-test.ts",
+    "build:vscode": "pnpm --filter gitwhisper-vscode build"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^24.10.0",
+    "@vitest/coverage-v8": "^3.2.7",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.7"
+  }
+}

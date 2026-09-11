@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.base.json",
+  "files": [],
+  "references": [
+    { "path": "packages/git" },
+    { "path": "packages/config" },
+    { "path": "packages/core" },
+    { "path": "packages/ai" },
+    { "path": "packages/editor" },
+    { "path": "apps/cli" }
+  ]
+}

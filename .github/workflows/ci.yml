@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-typecheck:
+    name: Code Quality & Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify code formatting
+        run: pnpm run format:check
+
+      - name: Run linter
+        run: pnpm run lint
+
+      - name: Build monorepo packages
+        run: pnpm run build
+
+      - name: Enforce coverage thresholds
+        run: pnpm run test:coverage
+
+  test:
+    name: Test Suite (${{ matrix.os }} - Node ${{ matrix.node-version }})
+    needs: lint-and-typecheck
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [20, 22]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure Git for test repository creation
+        run: |
+          git config --global user.name "GitWhisper CI"
+          git config --global user.email "ci@gitwhisper.local"
+          git config --global init.defaultBranch main
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build monorepo packages
+        run: pnpm run build
+
+      - name: Run unit & integration test suite
+        run: pnpm test
+
+      - name: Run end-to-end sandbox verification
+        run: npx tsx scripts/verify-phase12-14.ts

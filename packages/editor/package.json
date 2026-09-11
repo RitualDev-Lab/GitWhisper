@@ -1,0 +1,26 @@
+{
+  "name": "@gitwhisper/editor",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "IDE and editor integration layer for GitWhisper",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "tsc --clean"
+  },
+  "dependencies": {
+    "@gitwhisper/core": "workspace:*",
+    "@gitwhisper/git": "workspace:*",
+    "@gitwhisper/config": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
+}

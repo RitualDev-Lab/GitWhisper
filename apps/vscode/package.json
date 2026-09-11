@@ -1,0 +1,118 @@
+{
+  "name": "gitwhisper-vscode",
+  "displayName": "GitWhisper — AI Conventional Commit Intelligence",
+  "description": "Local-first & BYOK AI-assisted Git commit intelligence with Conventional Commits, privacy redaction, and atomic splitting.",
+  "version": "0.1.0",
+  "publisher": "ritualdev",
+  "license": "MIT",
+  "main": "./dist/extension.js",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["SCM Providers", "Programming Languages", "Other"],
+  "keywords": ["git", "commit", "conventional-commits", "ai", "scm"],
+  "activationEvents": ["onStartupFinished"],
+  "contributes": {
+    "commands": [
+      {
+        "command": "gitwhisper.generateCommit",
+        "title": "GitWhisper: Generate Commit Message",
+        "category": "GitWhisper",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "gitwhisper.explainCommit",
+        "title": "GitWhisper: Explain Commit Decision Provenance",
+        "category": "GitWhisper",
+        "icon": "$(info)"
+      },
+      {
+        "command": "gitwhisper.checkQuality",
+        "title": "GitWhisper: Check Staged Commit Quality",
+        "category": "GitWhisper",
+        "icon": "$(check)"
+      },
+      {
+        "command": "gitwhisper.showTimeline",
+        "title": "GitWhisper: View Commit Timeline",
+        "category": "GitWhisper",
+        "icon": "$(history)"
+      }
+    ],
+    "menus": {
+      "scm/title": [
+        {
+          "command": "gitwhisper.generateCommit",
+          "group": "navigation@1",
+          "when": "scmRepositoryCount > 0"
+        },
+        {
+          "command": "gitwhisper.explainCommit",
+          "group": "navigation@2",
+          "when": "scmRepositoryCount > 0"
+        }
+      ],
+      "scm/inputBox": [
+        {
+          "command": "gitwhisper.generateCommit",
+          "group": "inline",
+          "when": "scmRepositoryCount > 0"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "gitwhisper.generateCommit"
+        },
+        {
+          "command": "gitwhisper.explainCommit"
+        },
+        {
+          "command": "gitwhisper.checkQuality"
+        },
+        {
+          "command": "gitwhisper.showTimeline"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "gitwhisper.generateCommit",
+        "key": "alt+g c",
+        "mac": "cmd+alt+g c",
+        "when": "scmRepositoryCount > 0"
+      }
+    ],
+    "configuration": {
+      "title": "GitWhisper",
+      "properties": {
+        "gitwhisper.provider": {
+          "type": "string",
+          "enum": ["ollama", "openai", "mock"],
+          "default": "ollama",
+          "description": "Active AI provider for GitWhisper commit generation."
+        },
+        "gitwhisper.confirmBeforeCommit": {
+          "type": "boolean",
+          "default": true,
+          "description": "Always require developer review before applying commits."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@gitwhisper/config": "workspace:*",
+    "@gitwhisper/core": "workspace:*",
+    "@gitwhisper/editor": "workspace:*",
+    "@gitwhisper/git": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.8.2"
+  }
+}
