@@ -15,6 +15,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
+          version: 9
           run_install: false
 
       - name: Setup Node.js
@@ -31,4 +32,4 @@ jobs:
 
       - name: Check PR title with GitWhisper
         run: |
-          node apps/cli/dist/index.js check "${{ github.event.pull_request.title }}" --strict
+          node apps/cli/dist/cli.js check "${{ github.event.pull_request.title }}" --strict
