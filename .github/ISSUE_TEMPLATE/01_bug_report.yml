@@ -1,0 +1,58 @@
+name: ?? Bug Report
+description: Report an unexpected error, crash, or git plumbing failure in GitWhisper
+title: "[Bug]: <Summary of issue>"
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue! Please do NOT include real API keys or sensitive company credentials in your bug report.
+  - type: dropdown
+    id: environment
+    attributes:
+      label: GitWhisper Interface
+      options:
+        - CLI (Terminal / npx gitwhisper)
+        - VS Code Extension (SCM panel)
+        - Both
+    validations:
+      required: true
+  - type: dropdown
+    id: provider
+    attributes:
+      label: AI Model Provider Used
+      options:
+        - Ollama (Local)
+        - LM Studio (Local)
+        - OpenAI (GPT-4o, GPT-4o-mini)
+        - Anthropic (Claude 3.5 Sonnet)
+        - Google Gemini (Gemini 2.0 Flash / Pro)
+        - Groq (Llama-3.3, Qwen)
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: OS, Node.js & Git Versions
+      placeholder: e.g. Windows 11, Node v22.12.0, Git 2.45.0
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      placeholder: |
+        1. Stage changes with 'git add .'
+        2. Run 'npx gitwhisper'
+        3. See error '...'
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Terminal / Developer Console Output
+      placeholder: Paste the error stack trace or debug log here.
+      render: shell
+    validations:
+      required: false

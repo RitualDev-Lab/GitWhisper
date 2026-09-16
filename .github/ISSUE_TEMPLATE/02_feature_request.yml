@@ -1,0 +1,30 @@
+name: ? Feature Request
+description: Suggest an enhancement, new style variant, or AI model provider for GitWhisper
+title: "[Feature]: <Brief summary of request>"
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea to make Git commit generation smarter, faster, or more private? Let us know!
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or Workflow Gap
+      placeholder: What git workflow or limitation are you looking to improve?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Feature / Solution
+      placeholder: Describe the feature, CLI flag, or VS Code capability you would like.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      placeholder: Any other tools (opencommit, aicommits, Copilot) or existing manual workarounds?
+    validations:
+      required: false

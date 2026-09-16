@@ -1,0 +1,29 @@
+name: ??? Provider Integration or Secret Redaction Rule
+description: Request a new local/cloud AI provider or submit a regex/AST rule to sanitize sensitive tokens
+title: "[Provider / Privacy]: <Provider or Token Type>"
+labels: ["privacy", "enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### ??? Privacy & Provider Intelligence
+        GitWhisper strips API keys, JWTs, and passwords before diffs reach any model.
+        Use this template to propose a new provider or a new secret pattern to redact.
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - New Local / Self-Hosted Provider (Ollama, vLLM, LocalAI)
+        - New Cloud Provider (Mistral, Cohere, DeepSeek, etc.)
+        - New Secret Redaction Pattern (Token / Key / Credential format)
+        - Provider Streaming / Prompt Tuning
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Specification / Details
+      placeholder: Provide provider API documentation link, model name, or generic (non-sensitive) regex pattern.
+    validations:
+      required: true
