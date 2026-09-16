@@ -5,26 +5,41 @@
 ### AI-assisted Git commit intelligence grounded in your actual staged changes.
 **Local-first. BYOK. Privacy-hardened. Developer-approved.**
 
-[![CI Workflow](https://img.shields.io/badge/CI-Passing-brightgreen?style=flat-square&logo=githubactions&logoColor=white)](#)
-[![Tests](https://img.shields.io/badge/Tests-304%2F304%20Passing-success?style=flat-square&logo=vitest&logoColor=white)](#)
-[![Coverage](https://img.shields.io/badge/Coverage-74%25%20Verified-blue?style=flat-square)](#)
-[![Quality Suite](https://img.shields.io/badge/QS%20Suite-10%2F10%20Verified-purple?style=flat-square)](#)
-[![VS Code Extension](https://img.shields.io/badge/VS%20Code-SCM%20Ready-007ACC?style=flat-square&logo=visualstudiocode&logoColor=white)](#)
-[![Privacy](https://img.shields.io/badge/Privacy-Zero%20Leak%20Redaction-orange?style=flat-square)](#)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](#)
+[![CI Workflow](https://img.shields.io/badge/CI-Passing-brightgreen?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/RitualDev-Lab/GitWhisper/actions)
+[![Tests](https://img.shields.io/badge/Tests-304%2F304%20Passing-success?style=for-the-badge&logo=vitest&logoColor=white)](https://github.com/RitualDev-Lab/GitWhisper)
+[![Coverage](https://img.shields.io/badge/Coverage-74%25%20Verified-blue?style=for-the-badge)](https://github.com/RitualDev-Lab/GitWhisper)
+[![VS Code Extension](https://img.shields.io/badge/VS%20Code-SCM%20Ready-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)](https://github.com/RitualDev-Lab/GitWhisper)
+[![Privacy](https://img.shields.io/badge/Privacy-Zero%20Data%20Leak-orange?style=for-the-badge&logo=shield&logoColor=white)](https://github.com/RitualDev-Lab/GitWhisper)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+[![Featured on DevShelf](https://img.shields.io/badge/Featured%20on-DevShelf-7928CA?style=for-the-badge&logo=googlechrome&logoColor=white)](https://ritualdev-lab.github.io/DevShelf/)
 
 <p align="center">
-  <a href="#-quick-start">Quick Start</a> •
-  <a href="#-vs-code-extension">VS Code Extension</a> •
-  <a href="#-why-gitwhisper">Why GitWhisper?</a> •
-  <a href="#-core-features">Features</a> •
-  <a href="#-cli-experience">CLI Demo</a> •
-  <a href="#-monorepo-architecture">Architecture</a>
+  <a href="#-quick-start"><b>⚡ Quick Start</b></a> •
+  <a href="#-why-gitwhisper-comparison"><b>⚖️ Why GitWhisper</b></a> •
+  <a href="#-vs-code-extension-1-click-commit-in-scm"><b>🖥️ VS Code SCM</b></a> •
+  <a href="#-interactive-cli-experience"><b>🕹️ CLI Experience</b></a> •
+  <a href="#-monorepo-architecture"><b>🏗️ Architecture</b></a>
 </p>
 
 ---
 
 </div>
+
+## ⚖️ Why GitWhisper? (Comparison)
+
+Most AI commit tools dump raw diffs onto cloud servers, leaking API keys and generating inaccurate hallucinations. GitWhisper gives you deterministic git analysis, zero telemetry, and native VS Code integration:
+
+| Feature | 🔮 GitWhisper | opencommit | aicommits | Generic Copilot / Chat |
+|---|:---:|:---:|:---:|:---:|
+| **Local-First AI (Ollama, LM Studio, Llama)** | <b>✅ Native (100% Offline, $0 cost)</b> | ⚠️ Complex setup | ❌ OpenAI only | ❌ Cloud only |
+| **Zero Secret Leaks (AST Redaction)** | <b>🛡️ Automatic key & token sanitization</b> | ❌ Sends raw diff | ❌ Sends raw diff | ⚠️ Cloud policy dependent |
+| **Native VS Code 1-Click SCM Button** | <b>✅ Direct SCM commit box integration</b> | ❌ CLI only | ❌ CLI only | ⚠️ Chat prompt required |
+| **Conventional Commit Determinism** | <b>✅ Git plumbing parser + AST verification</b>| ❌ LLM guesswork | ❌ LLM guesswork | ❌ Inconsistent |
+| **Atomic Multi-Hunk Splitting** | <b>✅ Splits multi-concern staged changes</b> | ❌ Single commit | ❌ Single commit | ❌ Manual staging |
+| **Instant Style Switching** | <b>✅ Concise / Descriptive / Detailed (1-key)</b> | ❌ Single style | ❌ Single style | ⚠️ Needs prompt re-run |
+| **Open Source License** | <b>✅ MIT License (Free Forever)</b> | ✅ MIT | ✅ MIT | ❌ Paid Subscription |
+
+---
 
 ## 💡 Never Write `fix: update stuff` or `wip` Again
 
