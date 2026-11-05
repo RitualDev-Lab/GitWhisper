@@ -10,6 +10,8 @@
 [![Coverage](https://img.shields.io/badge/Coverage-74%25%20Verified-blue?style=for-the-badge)](https://github.com/RitualDev-Lab/GitWhisper)
 [![VS Code Extension](https://img.shields.io/badge/VS%20Code-SCM%20Ready-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)](https://github.com/RitualDev-Lab/GitWhisper)
 [![Privacy](https://img.shields.io/badge/Privacy-Zero%20Data%20Leak-orange?style=for-the-badge&logo=shield&logoColor=white)](https://github.com/RitualDev-Lab/GitWhisper)
+[![Node Version](https://img.shields.io/badge/Node-%3E%3D20.0.0-informational?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
+[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen?style=for-the-badge)](https://github.com/RitualDev-Lab/GitWhisper/pulls)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 [![Featured on DevShelf](https://img.shields.io/badge/Featured%20on-DevShelf-7928CA?style=for-the-badge&logo=googlechrome&logoColor=white)](https://ritualdev-lab.github.io/DevShelf/)
 

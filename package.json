@@ -4,6 +4,19 @@
   "private": true,
   "type": "module",
   "description": "AI-assisted Git commit intelligence tool by RitualDev",
+  "keywords": [
+    "git",
+    "git-commit",
+    "commit-message-generator",
+    "ai-commits",
+    "conventional-commits",
+    "git-assistant",
+    "developer-tools",
+    "cli",
+    "git-hook",
+    "productivity",
+    "ritualdev"
+  ],
   "packageManager": "pnpm@9.15.4",
   "engines": {
     "node": ">=20.0.0"
