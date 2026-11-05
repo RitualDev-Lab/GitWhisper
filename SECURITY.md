@@ -41,7 +41,7 @@ GitWhisper enforces defense-in-depth guarantees across local Git interactions, e
 
 If you discover a potential security vulnerability in GitWhisper, please report it responsibly:
 
-- **Email**: security@ritualdev.com
+- **Email**: security@ritualdev.in
 - Do NOT create a public issue on GitHub for security vulnerabilities.
 
 Please include:
