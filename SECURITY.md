@@ -1,53 +1,54 @@
-# Security Policy
+# 🛡️ RitualDev Lab Security Policy & Vulnerability Disclosure
 
-## Supported Versions
-
-| Version | Supported          |
-| ------- | ------------------ |
-| 0.8.x   | :white_check_mark: |
-| 0.7.x   | :white_check_mark: |
-| 0.6.x   | :white_check_mark: |
-| 0.5.x   | :white_check_mark: |
-| 0.4.x   | :white_check_mark: |
-| 0.3.x   | :white_check_mark: |
-| 0.2.x   | :white_check_mark: |
-| 0.1.x   | :white_check_mark: |
+> **Applies to**: All 25 repositories under `@RitualDev-Lab`  
+> **Official Intake**: `security@ritualdev.in`  
+> **PGP Public Key**: [https://ritualdev.in/pgp-key.txt](https://ritualdev.in/pgp-key.txt)  
+> **Security Policy (RFC 9116)**: [https://ritualdev.in/.well-known/security.txt](https://ritualdev.in/.well-known/security.txt)  
+> **Trust Center**: [https://ritualdev.in/trust](https://ritualdev.in/trust)  
+> **Effective Date**: November 2026  
 
 ---
 
-## Security Architecture & Invariants
+## 1. Supported Versions & SLA Guarantees
 
-GitWhisper enforces defense-in-depth guarantees across local Git interactions, external trackers, and AI providers:
+RitualDev Lab provides active security patching and vulnerability mitigation for the following operational software branches:
 
-1. **Credential Host-Binding (Release-Blocking Invariant)**:
-   - Developer tokens and credentials for external work-item trackers (e.g. GitHub, Jira) are strictly bound to their canonical hosts.
-   - Malicious or compromised repository configuration files cannot redirect credential transmission to foreign hosts.
-2. **Redirect & SSRF Protection**:
-   - Outbound HTTP requests strip `Authorization` headers on cross-origin redirects.
-   - Non-HTTP/HTTPS schemes (`file://`, `ftp://`, `gopher://`, etc.) are rejected immediately.
-3. **Data Isolation & Staged Boundaries**:
-   - Only explicitly staged files (`git diff --cached`) are read.
-   - Working tree modifications, `.env` files, and untracked files are never read, mutated, or sent.
-4. **Secret Scanning & Redaction**:
-   - Multi-layered regex and Shannon entropy scanners identify sensitive tokens prior to AI transmission and replace them with placeholders.
-   - Commit messages are scanned post-generation to prevent secret regurgitation.
-5. **Prompt Injection & Terminal Sanitization**:
-   - Code diffs and issue payloads are treated strictly as inert data in system prompts.
-   - Terminal control characters, ANSI escapes, and OSC window title strings are sanitized from all branch names, issues, and commit messages.
+| Project / Repository | Supported Versions | Security Support Status | Patch Turnaround SLA |
+| :--- | :--- | :---: | :---: |
+| **AgentShield** (`@ritualdev-lab/agentshield`) | `v0.2.x`, `main` | ✅ Active (24/7/365) | **< 24 Hours** (Critical) |
+| **DBShield** (`@ritualdev-lab/dbshield`) | `v0.2.x`, `main` | ✅ Active (24/7/365) | **< 24 Hours** (Critical) |
+| **SkillPrism** (`@ritualdev-lab/skillprism`) | `v0.1.x`, `main` | ✅ Active | **< 48 Hours** |
+| **WebSecAuditor** (`web-sec-auditor`) | `v0.1.x`, `main` | ✅ Active | **< 48 Hours** |
+| **GitWhisper** (`@ritualdev-lab/gitwhisper`) | `v0.1.x`, `main` | ✅ Active | **< 48 Hours** |
+| **Ritual Agent Defense IDE** | Latest published | ✅ Active | **< 48 Hours** |
+| **ritualdev-web** (`ritualdev.in`) | Production `main` | ✅ Active | **< 12 Hours** |
 
 ---
 
-## Reporting a Vulnerability
+## 2. Reporting a Security Vulnerability
 
-If you discover a potential security vulnerability in GitWhisper, please report it responsibly:
+If you discover a security vulnerability, zero-day evasion, or sensitive data leakage within any RitualDev Lab repository or utility, please report it through our coordinated disclosure channels:
 
-- **Email**: security@ritualdev.in
-- Do NOT create a public issue on GitHub for security vulnerabilities.
+1. **Email Intake**: Dispatch encrypted details to `security@ritualdev.in`.
+2. **PGP Encryption**: For confidential findings, encrypt communications using our official PGP key at [https://ritualdev.in/pgp-key.txt](https://ritualdev.in/pgp-key.txt).
+3. **GitHub Private Vulnerability Reporting**: You may also utilize GitHub's Private Vulnerability Reporting feature on any individual repository under `RitualDev-Lab`.
 
-Please include:
-1. Description of the issue
-2. Steps to reproduce
-3. Potential impact
+### Response & Triage SLA
+- **Initial Response & Human Triage**: **< 1 hour** for P1 critical severity; **< 4 hours** for P2 high severity.
+- **Triage Assessment & Status Updates**: Provided every **12 hours** until full resolution.
+- **Coordinated Disclosure Policy**: We request a **90-day embargo** following notification to allow for patch deployment and upstream consumer notification before public disclosure.
 
-We will review reports promptly and publish patches in accordance with responsible disclosure practices.
+---
 
+## 3. Statutory Compliance & Data Protection
+
+RitualDev operates under strict **Zero-Data-Retention** and **Local-First** principles:
+- **Indian Digital Personal Data Protection Act, 2023 (DPDP Act)**: Zero lines of customer code, API tokens, or prompts are transmitted or stored by RitualDev systems.
+- **European Union General Data Protection Regulation (GDPR)**: Execution occurs 100% locally on developer machines or inside customer VPC runners; zero cross-border personal data transfers occur under Chapter V.
+- **NIST SP 800-218 & US Executive Order 14028**: All releases include automated CycloneDX / SPDX Software Bill of Materials (SBOMs) with cryptographic SLSA Level 3 provenance.
+
+---
+
+## 4. Bounty & Hall of Fame Acknowledgments
+
+Valid, responsible security vulnerability disclosures are publicly recognized on our [Security Hall of Fame](https://ritualdev.in/advisories) and eligible for discretionary bounties based on CVSS 3.1 severity impact.
