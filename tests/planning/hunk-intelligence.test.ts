@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
 import { analyzeHunkIntelligence, discoverHunkRelationships, parsePatch } from "@gitwhisper/core";
+import { describe, expect, it } from "vitest";
 
 describe("Hunk Intelligence & Symbol Extraction", () => {
   it("extracts function and class symbols from hunk headers and line content", () => {

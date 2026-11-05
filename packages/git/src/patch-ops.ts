@@ -1,9 +1,9 @@
-import crypto from "node:crypto";
 import { spawn } from "node:child_process";
+import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { GitError, runGit } from "./executor.js";
 import { CommitHookFailedError } from "./commit.js";
+import { GitError, runGit } from "./executor.js";
 import { getIndexFingerprint } from "./index-ops.js";
 import type { GitCommitResult, GitStateSnapshot } from "./types.js";
 

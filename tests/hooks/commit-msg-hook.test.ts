@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { promisify } from "node:util";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { createTempGitRepo, type TempRepo } from "../helpers/git-test-helper.js";
+import { type TempRepo, createTempGitRepo } from "../helpers/git-test-helper.js";
 
 const execFileAsync = promisify(execFile);
 const cliEntry = path.resolve(process.cwd(), "apps/cli/dist/index.js");

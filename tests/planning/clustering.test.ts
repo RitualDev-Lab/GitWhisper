@@ -1,13 +1,13 @@
-import { describe, expect, it } from "vitest";
 import {
+  type CommitPlan,
   clusterChanges,
   discoverRelationships,
-  moveFileBetweenGroups,
   mergeGroups,
+  moveFileBetweenGroups,
   validateCommitPlanInvariants,
-  type CommitPlan,
 } from "@gitwhisper/core";
 import type { ClassifiedFileChange } from "@gitwhisper/core";
+import { describe, expect, it } from "vitest";
 
 describe("Concern Clustering & Commit Planning Graph", () => {
   it("groups coupled source and test into a single concern group", () => {

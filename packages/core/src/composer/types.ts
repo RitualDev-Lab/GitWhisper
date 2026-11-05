@@ -1,9 +1,9 @@
-import type { ChangeContext } from "../types.js";
-import type { CommitProposal, CommitValidationResult } from "../intelligence/types.js";
 import type { DecisionProvenance } from "../history/types.js";
-import type { CommitPlan } from "../planning/types.js";
+import type { CommitProposal, CommitValidationResult } from "../intelligence/types.js";
 import type { HunkCommitPlan } from "../planning/hunk-planner.js";
+import type { CommitPlan } from "../planning/types.js";
 import type { GitWhisperError } from "../sdk/errors.js";
+import type { ChangeContext } from "../types.js";
 
 export type ComposerState =
   | "analyzing"

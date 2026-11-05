@@ -1,7 +1,7 @@
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { getCommitDetails, runGit } from "@gitwhisper/git";
 import { checkCommitQuality } from "@gitwhisper/core";
-import { createTempGitRepo, type TempRepo } from "../helpers/git-test-helper.js";
+import { getCommitDetails, runGit } from "@gitwhisper/git";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { type TempRepo, createTempGitRepo } from "../helpers/git-test-helper.js";
 
 describe("Historical Commit Review & Details Extraction", () => {
   let repo: TempRepo;

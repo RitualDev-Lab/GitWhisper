@@ -1,11 +1,11 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { runGit } from "@gitwhisper/git";
 import {
-  getCommitTimeline,
-  extractTimelineCommits,
   clusterCommitsIntoWorkstreams,
+  extractTimelineCommits,
+  getCommitTimeline,
 } from "@gitwhisper/core";
-import { createTempGitRepo, type TempRepo } from "../helpers/git-test-helper.js";
+import { runGit } from "@gitwhisper/git";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { type TempRepo, createTempGitRepo } from "../helpers/git-test-helper.js";
 
 describe("Phase 14 — Commit Timeline & History Intelligence (@gitwhisper/core)", () => {
   let repo: TempRepo;

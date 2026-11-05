@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { getHookStatus, installCommitMsgHook, uninstallCommitMsgHook } from "@gitwhisper/git";
-import { createTempGitRepo, type TempRepo } from "../helpers/git-test-helper.js";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { type TempRepo, createTempGitRepo } from "../helpers/git-test-helper.js";
 
 describe("Git Hook Manager & Non-Destructive Chaining", () => {
   let repo: TempRepo;

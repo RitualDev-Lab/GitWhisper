@@ -1,6 +1,6 @@
-import { describe, expect, it } from "vitest";
 import { discoverRelationships } from "@gitwhisper/core";
 import type { ClassifiedFileChange } from "@gitwhisper/core";
+import { describe, expect, it } from "vitest";
 
 describe("Deterministic Relationship Discovery", () => {
   it("detects source <-> test relationships across standard conventions", () => {

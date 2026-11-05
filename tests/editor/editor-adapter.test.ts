@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { runGit } from "@gitwhisper/git";
-import { MyIDEAdapter, formatVariantsForQuickPick } from "@gitwhisper/editor";
 import { createGitWhisper } from "@gitwhisper/core";
-import { createTempGitRepo, type TempRepo } from "../helpers/git-test-helper.js";
+import { MyIDEAdapter, formatVariantsForQuickPick } from "@gitwhisper/editor";
+import { runGit } from "@gitwhisper/git";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { type TempRepo, createTempGitRepo } from "../helpers/git-test-helper.js";
 
 describe("Phase 13 — Editor + MyIDE Integration (@gitwhisper/editor)", () => {
   let repo: TempRepo;

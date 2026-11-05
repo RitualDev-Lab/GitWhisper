@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
+import { buildPatchSelection, parsePatch } from "../packages/core/dist/index.js";
 import {
   captureStateSnapshot,
   commitStagedChanges,
@@ -11,7 +12,6 @@ import {
   validatePatchWithGit,
   verifyWorkingTreeUnchanged,
 } from "../packages/git/dist/index.js";
-import { buildPatchSelection, parsePatch } from "../packages/core/dist/index.js";
 
 async function main() {
   console.log("===============================================================");

@@ -1,17 +1,17 @@
 import crypto from "node:crypto";
 import { getIndexFingerprint, hasMergeConflicts } from "@gitwhisper/git";
-import type { ChangeContext } from "../types.js";
-import { detectTypeCandidates } from "../intelligence/type-detector.js";
+import {
+  type HunkIntelligence,
+  analyzeHunkIntelligence,
+} from "../intelligence/hunk-intelligence.js";
 import { detectScopeCandidates } from "../intelligence/scope-detector.js";
+import { detectTypeCandidates } from "../intelligence/type-detector.js";
 import type { CommitProposal } from "../intelligence/types.js";
 import { parsePatch } from "../patch/parser.js";
-import type { GitPatch, PatchHunk, FilePatch } from "../patch/types.js";
-import {
-  analyzeHunkIntelligence,
-  type HunkIntelligence,
-} from "../intelligence/hunk-intelligence.js";
-import { discoverHunkRelationships, type HunkRelationship } from "./hunk-relationships.js";
-import { clusterHunks, type HunkCommitGroup } from "./hunk-clustering.js";
+import type { FilePatch, GitPatch, PatchHunk } from "../patch/types.js";
+import type { ChangeContext } from "../types.js";
+import { type HunkCommitGroup, clusterHunks } from "./hunk-clustering.js";
+import { type HunkRelationship, discoverHunkRelationships } from "./hunk-relationships.js";
 import type { PlanOptions } from "./types.js";
 
 export interface HunkCommitPlan {

@@ -2,9 +2,9 @@ export * from "./types.js";
 export * from "./extractor.js";
 export * from "./clustering.js";
 
-import type { CommitTimeline, TimelineOptions } from "./types.js";
-import { extractTimelineCommits } from "./extractor.js";
 import { clusterCommitsIntoWorkstreams } from "./clustering.js";
+import { extractTimelineCommits } from "./extractor.js";
+import type { CommitTimeline, TimelineOptions } from "./types.js";
 
 /**
  * Analyzes repository commit history and groups commits into logical workstreams.

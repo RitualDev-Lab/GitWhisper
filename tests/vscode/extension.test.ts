@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeAll } from "vitest";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { beforeAll, describe, expect, it, vi } from "vitest";
 
 vi.mock("vscode", () => {
   return {
@@ -33,7 +33,7 @@ vi.mock("vscode", () => {
 });
 
 import { formatVariantsForQuickPick } from "@gitwhisper/editor";
-import { getActiveRepository, type VSCodeGitAPI } from "../../apps/vscode/src/git.js";
+import { type VSCodeGitAPI, getActiveRepository } from "../../apps/vscode/src/git.js";
 
 describe("VS Code Extension (@gitwhisper/vscode)", () => {
   const extensionDir = path.resolve(__dirname, "../../apps/vscode");

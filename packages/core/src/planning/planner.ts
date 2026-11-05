@@ -1,9 +1,9 @@
 import crypto from "node:crypto";
 import { getIndexFingerprint, hasMergeConflicts } from "@gitwhisper/git";
-import type { ChangeContext } from "../types.js";
 import { detectScopeCandidates } from "../intelligence/scope-detector.js";
 import { detectTypeCandidates } from "../intelligence/type-detector.js";
 import type { CommitProposal } from "../intelligence/types.js";
+import type { ChangeContext } from "../types.js";
 import { clusterChanges } from "./clustering.js";
 import { discoverRelationships } from "./relationships.js";
 import type { CommitGroup, CommitPlan, PlanOptions } from "./types.js";

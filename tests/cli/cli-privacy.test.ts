@@ -3,8 +3,8 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { commitStagedChanges, runGit } from "@gitwhisper/git";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 const execFileAsync = promisify(execFile);
 const CLI_PATH = path.resolve(process.cwd(), "apps/cli/dist/index.js");

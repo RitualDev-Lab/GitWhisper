@@ -1,6 +1,6 @@
 import path from "node:path";
 import type { HunkIntelligence } from "../intelligence/hunk-intelligence.js";
-import type { PatchHunk, FilePatch } from "../patch/types.js";
+import type { FilePatch, PatchHunk } from "../patch/types.js";
 
 export type HunkRelationshipKind =
   | "same-symbol"

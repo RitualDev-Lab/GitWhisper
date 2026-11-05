@@ -3,15 +3,16 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
+import { enforceStrictPrivacyPolicy } from "../packages/config/dist/index.js";
 import {
   type ChangeContext,
   ConnectionStringDetector,
   EnvironmentFileDetector,
   JwtDetector,
   KnownFormatDetector,
-  PrivateKeyDetector,
   PrivacyPolicyBlockedError,
   PrivacyScanError,
+  PrivateKeyDetector,
   VariableHeuristicDetector,
   classifyProviderLocation,
   createDefaultDetectors,
@@ -20,7 +21,6 @@ import {
   scanCommitMessage,
   scanSensitiveContent,
 } from "../packages/core/dist/index.js";
-import { enforceStrictPrivacyPolicy } from "../packages/config/dist/index.js";
 import { commitStagedChanges, runGit } from "../packages/git/dist/index.js";
 
 const execFileAsync = promisify(execFile);

@@ -6,13 +6,13 @@ import {
   type CommitPlan,
   type CommitProposal,
   type CreatePlanOptions,
-  createGitWhisper,
   type GenerateCommitOptions,
   type GenerateVariantsOptions,
   type GitWhisperClient,
   GitWhisperError,
   type HunkCommitPlan,
   type SDKMultiVariantResult,
+  createGitWhisper,
 } from "@gitwhisper/core";
 import type {
   CommitEvidenceView,

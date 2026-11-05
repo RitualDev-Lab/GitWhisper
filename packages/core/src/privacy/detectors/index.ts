@@ -6,6 +6,7 @@ import { EnvironmentFileDetector } from "./env-file.js";
 import { JwtDetector } from "./jwt.js";
 import { KnownFormatDetector } from "./known-format.js";
 import { PrivateKeyDetector } from "./private-key.js";
+import { ShannonEntropyDetector } from "./shannon-entropy.js";
 import { VariableHeuristicDetector } from "./variable-heuristic.js";
 
 export {
@@ -16,11 +17,13 @@ export {
   ConnectionStringDetector,
   EnvironmentFileDetector,
   VariableHeuristicDetector,
+  ShannonEntropyDetector,
   CustomPatternDetector,
 };
 
 export function createDefaultDetectors(
   customPatterns: CustomSecretPattern[] = [],
+  entropyThreshold = 4.5,
 ): SecretDetector[] {
   return [
     new PrivateKeyDetector(),
@@ -30,6 +33,7 @@ export function createDefaultDetectors(
     new ConnectionStringDetector(),
     new EnvironmentFileDetector(),
     new VariableHeuristicDetector(),
+    new ShannonEntropyDetector(entropyThreshold),
     new CustomPatternDetector(customPatterns),
   ];
 }

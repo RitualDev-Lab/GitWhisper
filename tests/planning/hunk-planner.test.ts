@@ -1,15 +1,15 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
-  buildHunkCommitPlan,
-  moveHunkBetweenGroups,
-  mergeHunkGroups,
-  validateHunkPlanInvariants,
   type HunkCommitPlan,
+  buildHunkCommitPlan,
+  mergeHunkGroups,
+  moveHunkBetweenGroups,
+  validateHunkPlanInvariants,
 } from "@gitwhisper/core";
 import { commitStagedChanges, runGit } from "@gitwhisper/git";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 describe("Hunk Commit Planner & Invariants", () => {
   let tempDir: string;

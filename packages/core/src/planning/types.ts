@@ -1,6 +1,6 @@
 import type { GitFileStatus } from "@gitwhisper/git";
-import type { FileCategory } from "../types.js";
 import type { CommitProposal } from "../intelligence/types.js";
+import type { FileCategory } from "../types.js";
 
 export type RelationshipType =
   | "source-test"

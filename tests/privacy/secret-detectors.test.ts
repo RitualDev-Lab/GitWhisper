@@ -190,6 +190,7 @@ diff --git a/src/auth.ts b/src/auth.ts
 
   it("aggregates all default detectors smoothly", () => {
     const detectors = createDefaultDetectors();
-    expect(detectors.length).toBe(8);
+    expect(detectors.length).toBe(9);
+    expect(detectors.some((d) => d.name === "shannon-entropy")).toBe(true);
   });
 });
