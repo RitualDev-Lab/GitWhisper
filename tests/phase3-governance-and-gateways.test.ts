@@ -1,4 +1,7 @@
-import { describe, expect, it } from "vitest";
+import http from "node:http";
+import type { CommitGenerationRequest } from "@gitwhisper/ai";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { createProvider, getPrivacyBadge } from "../packages/ai/src/factory.js";
 import { AwsBedrockProvider } from "../packages/ai/src/providers/aws-bedrock.js";
 import { AzureOpenAIProvider } from "../packages/ai/src/providers/azure-openai.js";
 import {
@@ -9,14 +12,11 @@ import { EnterpriseIssueKeyValidator } from "../packages/core/src/workitems/ente
 
 describe("Phase 3 (GitWhisper): Pre-Commit Shannon Entropy Secret Blocking", () => {
   it("calculates accurate Shannon entropy in bits per character", () => {
-    // Repeated character has 0 entropy
     expect(calculateShannonEntropy("aaaaaaaaaaaaaaaa")).toBe(0);
 
-    // Predictable low-entropy English word
     const lowEntropy = calculateShannonEntropy("regular_english_text_here");
     expect(lowEntropy).toBeLessThan(4.0);
 
-    // High-entropy cryptographic token / API key
     const highEntropy = calculateShannonEntropy("dGhpcy1pcy1hLXJhbmRvbS1zZWNyZXQta2V5LTIwMjY=");
     expect(highEntropy).toBeGreaterThanOrEqual(4.5);
   });
@@ -106,29 +106,212 @@ describe("Phase 3 (GitWhisper): Enterprise Jira & Linear Issue Key Governance", 
 });
 
 describe("Phase 3 (GitWhisper): Corporate LLM Gateways (Azure OpenAI & AWS Bedrock)", () => {
-  it("initializes Azure OpenAI provider with tenant endpoint and deployment ID", () => {
+  let server: http.Server;
+  let port: number;
+  let baseUrl: string;
+
+  const dummyRequest: CommitGenerationRequest = {
+    repository: { name: "test-corp-repo", branch: "main" },
+    files: [{ path: "src/auth.ts", status: "modified", additions: 5, deletions: 1, binary: false }],
+    stats: { additions: 5, deletions: 1 },
+    patch: "+export function ssoLogin() {}\n",
+  };
+
+  beforeAll(async () => {
+    server = http.createServer((req, res) => {
+      res.setHeader("Content-Type", "application/json");
+
+      if (req.url?.includes("/openai/deployments/gpt-4o-enterprise/chat/completions")) {
+        let body = "";
+        req.on("data", (chunk) => {
+          body += chunk;
+        });
+        req.on("end", () => {
+          if (body.includes("3 distinct message variants")) {
+            res.end(
+              JSON.stringify({
+                choices: [
+                  {
+                    message: {
+                      content: JSON.stringify({
+                        type: "feat",
+                        scope: "auth",
+                        breaking: false,
+                        variants: {
+                          concise: {
+                            style: "concise",
+                            subject: "feat(auth): add sso",
+                            description: "add sso",
+                          },
+                          descriptive: {
+                            style: "descriptive",
+                            subject: "feat(auth): implement enterprise sso",
+                            description: "implement enterprise sso",
+                          },
+                          detailed: {
+                            style: "detailed",
+                            subject: "feat(auth): implement enterprise sso with azure",
+                            description: "implement enterprise sso with azure",
+                          },
+                        },
+                        reasoning: ["added enterprise sso"],
+                      }),
+                    },
+                  },
+                ],
+              }),
+            );
+          } else {
+            res.end(
+              JSON.stringify({
+                choices: [
+                  {
+                    message: {
+                      content: JSON.stringify({
+                        type: "feat",
+                        scope: "auth",
+                        description: "implement enterprise sso",
+                        subject: "feat(auth): implement enterprise sso",
+                        reasoning: ["added sso"],
+                        breaking: false,
+                      }),
+                    },
+                  },
+                ],
+              }),
+            );
+          }
+        });
+      } else if (req.url?.includes("/model/anthropic.claude-3-5-sonnet-20241022-v2:0/invoke")) {
+        let body = "";
+        req.on("data", (chunk) => {
+          body += chunk;
+        });
+        req.on("end", () => {
+          if (body.includes("3 distinct message variants")) {
+            res.end(
+              JSON.stringify({
+                content: [
+                  {
+                    text: JSON.stringify({
+                      type: "fix",
+                      scope: "sec",
+                      breaking: false,
+                      variants: {
+                        concise: {
+                          style: "concise",
+                          subject: "fix(sec): patch leak",
+                          description: "patch leak",
+                        },
+                        descriptive: {
+                          style: "descriptive",
+                          subject: "fix(sec): block secret leak",
+                          description: "block secret leak",
+                        },
+                        detailed: {
+                          style: "detailed",
+                          subject: "fix(sec): block secret leak using shannon entropy",
+                          description: "block secret leak using shannon entropy",
+                        },
+                      },
+                      reasoning: ["blocked secret leak"],
+                    }),
+                  },
+                ],
+              }),
+            );
+          } else {
+            res.end(
+              JSON.stringify({
+                content: [
+                  {
+                    text: JSON.stringify({
+                      type: "fix",
+                      scope: "sec",
+                      description: "block secret leak",
+                      subject: "fix(sec): block secret leak",
+                      reasoning: ["blocked leak"],
+                      breaking: false,
+                    }),
+                  },
+                ],
+              }),
+            );
+          }
+        });
+      } else {
+        res.statusCode = 404;
+        res.end(JSON.stringify({ error: "Not Found" }));
+      }
+    });
+
+    await new Promise<void>((resolve) => {
+      server.listen(0, "127.0.0.1", () => {
+        const addr = server.address() as any;
+        port = addr.port;
+        baseUrl = `http://127.0.0.1:${port}`;
+        resolve();
+      });
+    });
+  });
+
+  afterAll(async () => {
+    await new Promise<void>((resolve) => server.close(() => resolve()));
+  });
+
+  it("generates single commit and multi-variants via Azure OpenAI corporate gateway", async () => {
     const azure = new AzureOpenAIProvider({
-      endpoint: "https://my-enterprise.openai.azure.com",
+      endpoint: baseUrl,
       deploymentId: "gpt-4o-enterprise",
-      apiKey: "test-azure-api-key-123",
+      apiKey: "test-azure-api-key",
       apiVersion: "2024-06-01",
     });
 
-    expect(azure.id).toBe("azure-openai");
-    expect(azure.isLocal).toBe(false);
-    expect(azure.model).toBe("gpt-4o-enterprise");
-    expect(azure.apiVersion).toBe("2024-06-01");
+    const single = await azure.generateCommitMessage(dummyRequest);
+    expect(single.type).toBe("feat");
+    expect(single.subject).toBe("feat(auth): implement enterprise sso");
+    expect(single.provider).toBe("azure-openai");
+
+    const multi = await azure.generateCommitVariants(dummyRequest);
+    expect(multi.variants.concise.subject).toBe("feat(auth): add sso");
+    expect(multi.variants.descriptive.subject).toBe("feat(auth): implement enterprise sso");
   });
 
-  it("initializes AWS Bedrock provider with region and model ID", () => {
+  it("generates single commit and multi-variants via AWS Bedrock corporate gateway", async () => {
     const bedrock = new AwsBedrockProvider({
-      region: "us-west-2",
+      endpoint: baseUrl,
+      region: "us-east-1",
       modelId: "anthropic.claude-3-5-sonnet-20241022-v2:0",
+      accessKeyId: "mock_access_key",
     });
 
-    expect(bedrock.id).toBe("aws-bedrock");
-    expect(bedrock.isLocal).toBe(false);
-    expect(bedrock.region).toBe("us-west-2");
-    expect(bedrock.baseUrl).toContain("bedrock-runtime.us-west-2.amazonaws.com");
+    const single = await bedrock.generateCommitMessage(dummyRequest);
+    expect(single.type).toBe("fix");
+    expect(single.subject).toBe("fix(sec): block secret leak");
+    expect(single.provider).toBe("aws-bedrock");
+
+    const multi = await bedrock.generateCommitVariants(dummyRequest);
+    expect(multi.variants.concise.subject).toBe("fix(sec): patch leak");
+  });
+
+  it("instantiates corporate providers via factory and computes privacy badges", () => {
+    const azureProvider = createProvider({
+      provider: "azure-openai" as any,
+      baseUrl: "https://corp.openai.azure.com",
+      model: "gpt-4o",
+      apiKey: "secret",
+    } as any);
+
+    expect(azureProvider.id).toBe("azure-openai");
+    const badge = getPrivacyBadge(azureProvider);
+    expect(badge.isLocal).toBe(false);
+
+    const bedrockProvider = createProvider({
+      provider: "aws-bedrock" as any,
+      baseUrl: "https://bedrock.us-east-1.amazonaws.com",
+      model: "claude-3",
+    } as any);
+
+    expect(bedrockProvider.id).toBe("aws-bedrock");
   });
 });
