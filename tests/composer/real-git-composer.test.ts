@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { commitStagedChanges, getStagedFiles, runGit } from "@gitwhisper/git";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { type TempRepo, createTempGitRepo } from "../helpers/git-test-helper.js";
 
 describe("Phase 6 Real Git Composer Execution & Data-Loss Invariants", () => {

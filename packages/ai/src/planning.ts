@@ -1,4 +1,4 @@
-import type { CommitPlan, CommitGroup, HunkCommitPlan } from "@gitwhisper/core";
+import type { CommitGroup, CommitPlan, HunkCommitPlan } from "@gitwhisper/core";
 import type { AIProvider } from "./types.js";
 
 interface SemanticGroupResponse {

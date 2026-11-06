@@ -3,5 +3,7 @@ export * from "./prompt.js";
 export * from "./validator.js";
 export * from "./providers/ollama.js";
 export * from "./providers/openai-compat.js";
+export * from "./providers/azure-openai.js";
+export * from "./providers/aws-bedrock.js";
 export * from "./factory.js";
 export * from "./planning.js";

@@ -1,6 +1,6 @@
 import type { ChangeContext } from "../types.js";
-import { validateHunkPlanInvariants, type HunkCommitPlan } from "./hunk-planner.js";
 import type { HunkFileChange } from "./hunk-clustering.js";
+import { type HunkCommitPlan, validateHunkPlanInvariants } from "./hunk-planner.js";
 
 /**
  * Rebuilds fileChanges mapping for a set of hunk IDs.

@@ -1,13 +1,13 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import fs from "node:fs/promises";
-import { runGit } from "@gitwhisper/git";
 import {
-  createGitWhisper,
   GitWhisperClientImpl,
   GitWhisperError,
   GitWhisperErrorCode,
+  createGitWhisper,
 } from "@gitwhisper/core";
-import { createTempGitRepo, type TempRepo } from "../helpers/git-test-helper.js";
+import { runGit } from "@gitwhisper/git";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { type TempRepo, createTempGitRepo } from "../helpers/git-test-helper.js";
 
 describe("Phase 12 — Reusable Core SDK (@gitwhisper/core)", () => {
   let repo: TempRepo;

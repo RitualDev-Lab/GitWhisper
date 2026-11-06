@@ -1,6 +1,6 @@
-import { describe, expect, it } from "vitest";
 import { checkCommitQuality } from "@gitwhisper/core";
 import type { ChangeContext, CommitPolicy } from "@gitwhisper/core";
+import { describe, expect, it } from "vitest";
 
 const policy: CommitPolicy = {
   style: "conventional",

@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
 import { parsePatch } from "@gitwhisper/core";
+import { describe, expect, it } from "vitest";
 
 describe("Unified Diff Patch Parser", () => {
   it("parses a standard modified file with multiple hunks", () => {

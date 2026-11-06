@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { PatchHunk, FilePatch } from "../patch/types.js";
+import type { FilePatch, PatchHunk } from "../patch/types.js";
 import type { ChangeSignal } from "./types.js";
 
 export interface HunkIntelligence {

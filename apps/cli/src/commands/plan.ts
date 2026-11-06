@@ -1,14 +1,14 @@
 import readline from "node:readline";
 import { loadConfig } from "@gitwhisper/config";
 import {
+  type CommitPlan,
+  type HunkCommitPlan,
   buildChangeContext,
   buildCommitPlan,
   buildHunkCommitPlan,
   buildPatchSelection,
-  moveHunkBetweenGroups,
   mergeHunkGroups,
-  type CommitPlan,
-  type HunkCommitPlan,
+  moveHunkBetweenGroups,
 } from "@gitwhisper/core";
 import { findRepository, hasStagedChanges } from "@gitwhisper/git";
 import {

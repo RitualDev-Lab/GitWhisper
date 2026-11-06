@@ -1,6 +1,6 @@
-import { describe, expect, it } from "vitest";
 import { checkCommitQuality, parseCommitMessage } from "@gitwhisper/core";
 import type { CommitPolicy } from "@gitwhisper/core";
+import { describe, expect, it } from "vitest";
 
 const defaultPolicy: CommitPolicy = {
   style: "conventional",

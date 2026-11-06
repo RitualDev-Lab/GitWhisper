@@ -6,6 +6,7 @@ export * from "./cache.js";
 export * from "./sanitizer.js";
 export * from "./relevance-engine.js";
 export * from "./reference-formatter.js";
+export * from "./enterprise-validator.js";
 export * from "./providers/generic.js";
 export * from "./providers/github.js";
 export * from "./providers/jira.js";

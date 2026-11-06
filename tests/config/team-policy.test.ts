@@ -1,11 +1,11 @@
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
   InvalidConfigError,
   loadConfig,
   resolveCommitPolicy,
   validateRepositoryConfig,
 } from "@gitwhisper/config";
-import { createTempGitRepo, type TempRepo } from "../helpers/git-test-helper.js";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { type TempRepo, createTempGitRepo } from "../helpers/git-test-helper.js";
 
 describe("Team Configuration & Commit Policy Resolution", () => {
   let repo: TempRepo;

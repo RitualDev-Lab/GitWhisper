@@ -1,5 +1,5 @@
+import { buildPatchSelection, buildRemainingPatch, parsePatch } from "@gitwhisper/core";
 import { describe, expect, it } from "vitest";
-import { parsePatch, buildPatchSelection, buildRemainingPatch } from "@gitwhisper/core";
 
 describe("Patch Reconstruction & Selection Builder", () => {
   const multiFileDiff = `diff --git a/src/auth.ts b/src/auth.ts

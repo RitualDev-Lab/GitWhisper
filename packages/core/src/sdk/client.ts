@@ -13,6 +13,7 @@ import {
   hasStagedChanges,
   syncPrimaryIndex,
 } from "@gitwhisper/git";
+import type { CommitVariant } from "../composer/types.js";
 import { buildChangeContext } from "../context.js";
 import { analyzeRepositoryHistory } from "../history/analyzer.js";
 import type { RepositoryCommitStyle } from "../history/types.js";
@@ -21,16 +22,15 @@ import { formatCommitSubject } from "../intelligence/validator.js";
 import { buildPatchSelection } from "../patch/builder.js";
 import { parsePatch } from "../patch/parser.js";
 import type { GitPatch } from "../patch/types.js";
+import { type HunkCommitPlan, buildHunkCommitPlan } from "../planning/hunk-planner.js";
 import { buildCommitPlan } from "../planning/planner.js";
-import { buildHunkCommitPlan, type HunkCommitPlan } from "../planning/hunk-planner.js";
 import type { CommitPlan } from "../planning/types.js";
-import { prepareProviderContext, PrivacyPolicyBlockedError } from "../privacy/index.js";
+import { PrivacyPolicyBlockedError, prepareProviderContext } from "../privacy/index.js";
 import { checkCommitQuality } from "../quality/index.js";
 import type { CommitQualityResult } from "../quality/types.js";
 import { getCommitTimeline } from "../timeline/index.js";
 import type { CommitTimeline, TimelineOptions } from "../timeline/types.js";
 import type { ChangeContext } from "../types.js";
-import type { CommitVariant } from "../composer/types.js";
 import { parseBranchContext } from "../workitems/branch-parser.js";
 import type { BranchContext } from "../workitems/types.js";
 import { GitWhisperError } from "./errors.js";

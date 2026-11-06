@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { buildPatchSelection, buildRemainingPatch, parsePatch } from "@gitwhisper/core";
 import {
   captureStateSnapshot,
   commitStagedChanges,
@@ -12,7 +12,7 @@ import {
   validatePatchWithGit,
   verifyWorkingTreeUnchanged,
 } from "@gitwhisper/git";
-import { buildPatchSelection, buildRemainingPatch, parsePatch } from "@gitwhisper/core";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 describe("Phase 5 Hunk-Level Partial Staging & Zero-Data-Loss Invariants", () => {
   let tempDir: string;

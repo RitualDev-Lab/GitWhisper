@@ -1,5 +1,5 @@
-import { MyIDEAdapter, formatVariantsForQuickPick } from "@gitwhisper/editor";
 import { getCommitTimeline } from "@gitwhisper/core";
+import { MyIDEAdapter, formatVariantsForQuickPick } from "@gitwhisper/editor";
 import * as vscode from "vscode";
 import { getActiveRepository, getVSCodeGitAPI } from "./git.js";
 

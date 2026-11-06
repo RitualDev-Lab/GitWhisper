@@ -12,33 +12,33 @@ import {
   type CommitVariant,
   type CommitVariantStyle,
   type HunkCommitPlan,
+  type IssueReferencePolicy,
   PrivacyPolicyBlockedError,
   type ProviderSafeContext,
+  type WorkItem,
+  type WorkItemReference,
   analyzeRepositoryHistory,
   applyComposerOverrides,
   buildChangeContext,
   buildHunkCommitPlan,
   computeHistoryCacheKey,
+  createWorkItemProvider,
+  evaluateIntentRelevance,
+  findPrimaryRemote,
   formatCommitSubject,
   getCachedHistoryProfile,
+  globalWorkItemCache,
+  insertReferenceIntoMessage,
+  parseBranchContext,
   prepareProviderContext,
   resolveCommitStyle,
   sanitizeTerminalString,
+  sanitizeWorkItemForAI,
   scanCommitMessage,
   setCachedHistoryProfile,
   switchVariant,
   transitionComposer,
   validateCommitProposal,
-  createWorkItemProvider,
-  evaluateIntentRelevance,
-  findPrimaryRemote,
-  globalWorkItemCache,
-  insertReferenceIntoMessage,
-  parseBranchContext,
-  sanitizeWorkItemForAI,
-  type IssueReferencePolicy,
-  type WorkItem,
-  type WorkItemReference,
 } from "@gitwhisper/core";
 import {
   commitStagedChanges,
@@ -54,8 +54,8 @@ import { showCommitDetails } from "../ui/details.js";
 import { editCommitMessage } from "../ui/editor.js";
 import { pickCommitScope, pickCommitType, toggleBreakingChange } from "../ui/overrides.js";
 import { promptPrivacyReview } from "../ui/privacy-prompt.js";
-import { promptWorkItemReview } from "../ui/work-item-prompt.js";
 import { colors, printHeader } from "../ui/terminal.js";
+import { promptWorkItemReview } from "../ui/work-item-prompt.js";
 import { runSplit } from "./split.js";
 
 export interface GenerateOptions extends ConfigOverrides {

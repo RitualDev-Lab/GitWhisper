@@ -1,4 +1,6 @@
 import type { ResolvedConfig } from "@gitwhisper/config";
+import { AwsBedrockProvider } from "./providers/aws-bedrock.js";
+import { AzureOpenAIProvider } from "./providers/azure-openai.js";
 import { OllamaProvider } from "./providers/ollama.js";
 import { OpenAICompatProvider } from "./providers/openai-compat.js";
 import type { AIProvider } from "./types.js";
@@ -28,8 +30,23 @@ export function createProvider(config: ResolvedConfig): AIProvider {
     });
   }
 
+  if ((config.provider as string) === "azure-openai") {
+    return new AzureOpenAIProvider({
+      endpoint: config.baseUrl,
+      deploymentId: config.model,
+      apiKey: config.apiKey,
+    });
+  }
+
+  if ((config.provider as string) === "aws-bedrock") {
+    return new AwsBedrockProvider({
+      modelId: config.model,
+      endpoint: config.baseUrl,
+    });
+  }
+
   throw new Error(
-    `Unsupported provider: "${config.provider}". Supported: "ollama", "openai-compatible"`,
+    `Unsupported provider: "${config.provider}". Supported: "ollama", "openai-compatible", "azure-openai", "aws-bedrock"`,
   );
 }
 
@@ -58,19 +75,41 @@ export function getPrivacyBadge(provider: AIProvider): PrivacyBadge {
  */
 export async function generateVariants(
   provider: AIProvider,
-  request: import("./types.js").CommitGenerationRequest,
+  request: Parameters<AIProvider["generateCommitMessage"]>[0],
   signal?: AbortSignal,
-): Promise<import("./types.js").MultiVariantGenerationResult> {
-  if (typeof provider.generateCommitVariants === "function") {
+) {
+  if (provider.generateCommitVariants) {
     return provider.generateCommitVariants(request, signal);
   }
 
   const single = await provider.generateCommitMessage(request, signal);
-  const { validateCommitVariantsResponse } = await import("./validator.js");
-  return validateCommitVariantsResponse(
-    JSON.stringify(single),
-    provider.id,
-    request.allowedTypes,
-    request.styleContext?.style,
-  );
+  return {
+    type: single.type,
+    scope: single.scope,
+    breaking: single.breaking,
+    breakingDescription: single.breakingDescription,
+    variants: {
+      concise: {
+        style: "concise" as const,
+        subject: single.subject,
+        description: single.description,
+      },
+      descriptive: {
+        style: "descriptive" as const,
+        subject: single.subject,
+        description: single.description,
+        body: single.body,
+      },
+      detailed: {
+        style: "detailed" as const,
+        subject: single.subject,
+        description: single.description,
+        body: single.body,
+      },
+    },
+    reasoning: single.reasoning,
+    provider: single.provider,
+    model: single.model,
+    rawResponse: single.rawResponse,
+  };
 }

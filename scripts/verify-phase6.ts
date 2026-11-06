@@ -4,6 +4,7 @@ import http from "node:http";
 import os from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
+import { validateCommitVariantsResponse } from "../packages/ai/dist/index.js";
 import {
   type CommitComposerSession,
   type CommitVariant,
@@ -17,7 +18,6 @@ import {
   validateCommitProposal,
 } from "../packages/core/dist/index.js";
 import { commitStagedChanges, runGit } from "../packages/git/dist/index.js";
-import { validateCommitVariantsResponse } from "../packages/ai/dist/index.js";
 
 const execFileAsync = promisify(execFile);
 const CLI_PATH = path.resolve(process.cwd(), "apps/cli/dist/index.js");
