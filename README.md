@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
 
 # 🔮 GitWhisper
 
@@ -13,6 +13,7 @@
 [![Node Version](https://img.shields.io/badge/Node-%3E%3D20.0.0-informational?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen?style=for-the-badge)](https://github.com/RitualDev-Lab/GitWhisper/pulls)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+[![Sponsor on Dodo Payments](https://img.shields.io/badge/Sponsor-Dodo%20Payments-8b5cf6?style=for-the-badge&logo=shield&logoColor=white)](https://checkout.dodopayments.com/buy/pdt_0NpjONGugY5QkrFDUaPva)
 [![Featured on DevShelf](https://img.shields.io/badge/Featured%20on-DevShelf-7928CA?style=for-the-badge&logo=googlechrome&logoColor=white)](https://ritualdev-lab.github.io/DevShelf/)
 
 <p align="center">
@@ -362,6 +363,26 @@ pnpm run build
 ```
 
 ---
+
+---
+
+## 💖 Sponsor & Support via Dodo Payments
+
+GitWhisper is 100% open-source and local-first. Your sponsorship directly finances our cross-platform Git CLI testing rigs, multi-model BYOK test harness, and VS Code extension marketplace publishing.
+
+<div align="center">
+
+[![Sponsor on Dodo Payments](https://img.shields.io/badge/Sponsor_via_Dodo-Payments-8b5cf6?style=for-the-badge&logo=shield&logoColor=white)](https://checkout.dodopayments.com/buy/pdt_0NpjONGugY5QkrFDUaPva)
+[![Interactive Donation Portal](https://img.shields.io/badge/Donation_Portal-Cards%20%7C%20UPI%20%7C%20Apple%20Pay-ff5964?style=for-the-badge&logo=heart&logoColor=white)](https://ritualdev.in/donate)
+[![GitHub Sponsors](https://img.shields.io/badge/GitHub_Sponsors-RitualDev--Lab-ea4aaa?style=for-the-badge&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/RitualDev-Lab)
+
+<br/>
+
+[**⚡ 1-Click Dodo Payments Checkout**](https://checkout.dodopayments.com/buy/pdt_0NpjONGugY5QkrFDUaPva) &nbsp;•&nbsp; [**🎁 Interactive Donation Form (USD & INR UPI)**](https://ritualdev.in/donate) &nbsp;•&nbsp; [**❤️ GitHub Sponsors**](https://github.com/sponsors/RitualDev-Lab)
+
+<sub>🔒 *Zero physical shipping required. Powered by Dodo Payments (Merchant of Record) with instant tax invoice and global payment methods (Cards, UPI, Apple Pay).*</sub>
+
+</div>
 
 ## 📄 License
 
