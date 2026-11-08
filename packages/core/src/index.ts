@@ -1,6 +1,7 @@
 export * from "./types.js";
 export * from "./classifier.js";
 export * from "./diff-guard.js";
+export * from "./ast-diff-guard.js";
 export * from "./context.js";
 export * from "./intelligence/types.js";
 export * from "./intelligence/type-detector.js";

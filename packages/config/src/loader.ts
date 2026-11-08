@@ -763,6 +763,11 @@ export async function loadConfig(
       repoHooks.commitMsg ??
       fileHooks.commitMsg ??
       DEFAULT_HOOKS_CONFIG.commitMsg,
+    preCommit:
+      overrideHooks.preCommit ??
+      repoHooks.preCommit ??
+      fileHooks.preCommit ??
+      DEFAULT_HOOKS_CONFIG.preCommit,
   };
 
   const isConfigured =

@@ -7,25 +7,31 @@ const HOOK_MARKER = "# Managed by GitWhisper";
 const CHAIN_START = "# --- GitWhisper Managed Hook Chain ---";
 const CHAIN_END = "# --- End GitWhisper Managed Hook Chain ---";
 
-const STANDALONE_HOOK_SCRIPT = `#!/bin/sh
+function getStandaloneScript(hookName: string): string {
+  const arg = hookName === "commit-msg" ? ' "$1"' : "";
+  return `#!/bin/sh
 ${HOOK_MARKER}
 
 if command -v gitwhisper >/dev/null 2>&1; then
-  gitwhisper hook commit-msg "$1"
+  gitwhisper hook ${hookName}${arg}
 elif command -v npx >/dev/null 2>&1; then
-  npx --no-install gitwhisper hook commit-msg "$1"
+  npx --no-install gitwhisper hook ${hookName}${arg}
 fi
 `;
+}
 
-const CHAIN_HOOK_SNIPPET = `
+function getChainSnippet(hookName: string): string {
+  const arg = hookName === "commit-msg" ? ' "$1"' : "";
+  return `
 ${CHAIN_START}
 if command -v gitwhisper >/dev/null 2>&1; then
-  gitwhisper hook commit-msg "$1" || exit $?
+  gitwhisper hook ${hookName}${arg} || exit $?
 elif command -v npx >/dev/null 2>&1; then
-  npx --no-install gitwhisper hook commit-msg "$1" || exit $?
+  npx --no-install gitwhisper hook ${hookName}${arg} || exit $?
 fi
 ${CHAIN_END}
 `;
+}
 
 /**
  * Resolves the Git hooks directory for a repository.
@@ -44,7 +50,7 @@ export async function getHooksDirectory(repoRoot: string): Promise<string> {
 }
 
 /**
- * Inspects status of a specific Git hook (default commit-msg).
+ * Inspects status of a specific Git hook (commit-msg or pre-commit).
  */
 export async function getHookStatus(
   repoRoot: string,
@@ -80,16 +86,17 @@ export async function getHookStatus(
 }
 
 /**
- * Safely installs the commit-msg hook.
+ * Safely installs any Git hook (commit-msg or pre-commit).
  * Will NOT silently overwrite existing non-GitWhisper hooks unless force is specified.
  */
-export async function installCommitMsgHook(
+export async function installHook(
   repoRoot: string,
+  hookName = "commit-msg",
   options: { force?: boolean } = {},
 ): Promise<{ success: boolean; installed: boolean; message: string; chained?: boolean }> {
   const hooksDir = await getHooksDirectory(repoRoot);
   await fs.mkdir(hooksDir, { recursive: true });
-  const hookPath = path.join(hooksDir, "commit-msg");
+  const hookPath = path.join(hooksDir, hookName);
 
   let existingContent: string | null = null;
   try {
@@ -103,7 +110,7 @@ export async function installCommitMsgHook(
       return {
         success: true,
         installed: true,
-        message: "GitWhisper commit-msg hook is already installed.",
+        message: `GitWhisper ${hookName} hook is already installed.`,
         chained: existingContent.includes(CHAIN_START),
       };
     }
@@ -113,13 +120,12 @@ export async function installCommitMsgHook(
       return {
         success: false,
         installed: false,
-        message:
-          "Existing commit-msg hook detected. GitWhisper will not overwrite it automatically. Use --force to chain GitWhisper into the existing hook.",
+        message: `Existing ${hookName} hook detected. GitWhisper will not overwrite it automatically. Use --force to chain GitWhisper into the existing hook.`,
       };
     }
 
     // Force enabled: chain GitWhisper cleanly into existing hook
-    const chainedContent = `${existingContent.trimEnd()}\n${CHAIN_HOOK_SNIPPET}`;
+    const chainedContent = `${existingContent.trimEnd()}\n${getChainSnippet(hookName)}`;
     await fs.writeFile(hookPath, chainedContent, "utf8");
     try {
       await fs.chmod(hookPath, 0o755);
@@ -130,13 +136,13 @@ export async function installCommitMsgHook(
     return {
       success: true,
       installed: true,
-      message: "Chained GitWhisper into existing commit-msg hook.",
+      message: `Chained GitWhisper into existing ${hookName} hook.`,
       chained: true,
     };
   }
 
   // No existing hook: install standalone script
-  await fs.writeFile(hookPath, STANDALONE_HOOK_SCRIPT, "utf8");
+  await fs.writeFile(hookPath, getStandaloneScript(hookName), "utf8");
   try {
     await fs.chmod(hookPath, 0o755);
   } catch {
@@ -146,21 +152,20 @@ export async function installCommitMsgHook(
   return {
     success: true,
     installed: true,
-    message: "GitWhisper commit-msg hook installed successfully.",
+    message: `GitWhisper ${hookName} hook installed successfully.`,
     chained: false,
   };
 }
 
 /**
- * Uninstalls GitWhisper from commit-msg hook.
- * If hook was chained, removes only the GitWhisper chain.
- * If hook was foreign, leaves it untouched.
+ * Uninstalls GitWhisper from a Git hook.
  */
-export async function uninstallCommitMsgHook(
+export async function uninstallHook(
   repoRoot: string,
+  hookName = "commit-msg",
 ): Promise<{ success: boolean; installed: boolean; message: string }> {
   const hooksDir = await getHooksDirectory(repoRoot);
-  const hookPath = path.join(hooksDir, "commit-msg");
+  const hookPath = path.join(hooksDir, hookName);
 
   let content: string;
   try {
@@ -169,7 +174,7 @@ export async function uninstallCommitMsgHook(
     return {
       success: true,
       installed: false,
-      message: "No commit-msg hook found.",
+      message: `No ${hookName} hook found.`,
     };
   }
 
@@ -184,7 +189,7 @@ export async function uninstallCommitMsgHook(
     return {
       success: true,
       installed: false,
-      message: "GitWhisper hook chain removed from existing commit-msg hook.",
+      message: `GitWhisper hook chain removed from existing ${hookName} hook.`,
     };
   }
 
@@ -193,14 +198,51 @@ export async function uninstallCommitMsgHook(
     return {
       success: true,
       installed: false,
-      message: "GitWhisper commit-msg hook uninstalled successfully.",
+      message: `GitWhisper ${hookName} hook uninstalled successfully.`,
     };
   }
 
   return {
     success: false,
     installed: true,
-    message:
-      "Existing commit-msg hook is not managed by GitWhisper. Skipping uninstall to protect user hooks.",
+    message: `Existing ${hookName} hook is not managed by GitWhisper. Skipping uninstall to protect user hooks.`,
   };
+}
+
+/**
+ * Safely installs the commit-msg hook.
+ */
+export async function installCommitMsgHook(
+  repoRoot: string,
+  options: { force?: boolean } = {},
+): Promise<{ success: boolean; installed: boolean; message: string; chained?: boolean }> {
+  return installHook(repoRoot, "commit-msg", options);
+}
+
+/**
+ * Uninstalls GitWhisper from commit-msg hook.
+ */
+export async function uninstallCommitMsgHook(
+  repoRoot: string,
+): Promise<{ success: boolean; installed: boolean; message: string }> {
+  return uninstallHook(repoRoot, "commit-msg");
+}
+
+/**
+ * Safely installs the pre-commit hook (Differential Guard & Secret Sanitizer).
+ */
+export async function installPreCommitHook(
+  repoRoot: string,
+  options: { force?: boolean } = {},
+): Promise<{ success: boolean; installed: boolean; message: string; chained?: boolean }> {
+  return installHook(repoRoot, "pre-commit", options);
+}
+
+/**
+ * Uninstalls GitWhisper from pre-commit hook.
+ */
+export async function uninstallPreCommitHook(
+  repoRoot: string,
+): Promise<{ success: boolean; installed: boolean; message: string }> {
+  return uninstallHook(repoRoot, "pre-commit");
 }
