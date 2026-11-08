@@ -123,11 +123,13 @@ export async function runHooks(action = "status", options: HooksOptions = {}): P
     console.log(
       JSON.stringify(
         {
-          "commit-msg": {
+          ...commitStatus,
+          mode: config.hooks.commitMsg,
+          commitMsg: {
             ...commitStatus,
             mode: config.hooks.commitMsg,
           },
-          "pre-commit": {
+          preCommit: {
             ...preCommitStatus,
             mode: config.hooks.preCommit,
           },
