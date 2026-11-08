@@ -13,6 +13,7 @@ import {
   type CommitVariantStyle,
   type HunkCommitPlan,
   type IssueReferencePolicy,
+  PreCommitASTDiffGuard,
   PrivacyPolicyBlockedError,
   type ProviderSafeContext,
   type WorkItem,
@@ -208,6 +209,15 @@ export async function runGenerate(options: GenerateOptions = {}): Promise<void> 
 
   // Use the certified sanitized context for AI generation
   context = safeContext.changeContext;
+
+  // Apply Pre-Commit AST Differential Guard to sanitize patch context before remote LLM transmission
+  const astGuardReport = PreCommitASTDiffGuard.inspect(context.patch, { mode: "strict" });
+  if (astGuardReport.violations.length > 0) {
+    context = {
+      ...context,
+      patch: astGuardReport.sanitizedPatch,
+    };
+  }
 
   // History Analysis & Caching
   let historyProfile = analyzeRepositoryHistory([]);

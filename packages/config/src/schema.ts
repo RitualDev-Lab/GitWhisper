@@ -15,6 +15,7 @@ export type HookMode = "off" | "warn" | "strict";
 
 export interface HooksConfig {
   commitMsg?: HookMode;
+  preCommit?: HookMode;
 }
 
 export interface CommitPolicy {
@@ -214,6 +215,7 @@ export const DEFAULT_ALLOWED_TYPES = [
 
 export const DEFAULT_HOOKS_CONFIG: Required<HooksConfig> = {
   commitMsg: "warn",
+  preCommit: "warn",
 };
 
 export const DEFAULT_COMMIT_CONFIG: Required<Omit<CommitConfig, "scopes" | "requiredScopes">> & {

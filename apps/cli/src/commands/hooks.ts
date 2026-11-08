@@ -3,7 +3,9 @@ import {
   findRepository,
   getHookStatus,
   installCommitMsgHook,
+  installPreCommitHook,
   uninstallCommitMsgHook,
+  uninstallPreCommitHook,
 } from "@gitwhisper/git";
 import { colors, printHeader } from "../ui/terminal.js";
 
@@ -11,6 +13,7 @@ export interface HooksOptions {
   force?: boolean;
   mode?: "off" | "warn" | "strict";
   json?: boolean;
+  hook?: "commit-msg" | "pre-commit" | "all";
 }
 
 export async function runHooks(action = "status", options: HooksOptions = {}): Promise<void> {
@@ -37,12 +40,33 @@ export async function runHooks(action = "status", options: HooksOptions = {}): P
   }
 
   const config = await loadConfig({}, repoRoot);
-  const configuredMode = config.hooks.commitMsg;
+  const targetHook = options.hook ?? "commit-msg";
 
   if (action === "install") {
-    const res = await installCommitMsgHook(repoRoot, { force: options.force });
+    let res: { success: boolean; installed: boolean; message: string; chained?: boolean };
+
+    if (targetHook === "pre-commit") {
+      res = await installPreCommitHook(repoRoot, { force: options.force });
+    } else if (targetHook === "all") {
+      const res1 = await installCommitMsgHook(repoRoot, { force: options.force });
+      const res2 = await installPreCommitHook(repoRoot, { force: options.force });
+      res = {
+        success: res1.success && res2.success,
+        installed: res1.installed && res2.installed,
+        message: `${res1.message} | ${res2.message}`,
+        chained: res1.chained || res2.chained,
+      };
+    } else {
+      res = await installCommitMsgHook(repoRoot, { force: options.force });
+    }
+
+    const activeMode =
+      targetHook === "pre-commit"
+        ? (options.mode ?? config.hooks.preCommit)
+        : (options.mode ?? config.hooks.commitMsg);
+
     if (options.json) {
-      console.log(JSON.stringify({ ...res, mode: options.mode ?? configuredMode }, null, 2));
+      console.log(JSON.stringify({ ...res, hook: targetHook, mode: activeMode }, null, 2));
       process.exit(res.success ? 0 : 1);
     }
 
@@ -50,7 +74,7 @@ export async function runHooks(action = "status", options: HooksOptions = {}): P
     if (res.success) {
       console.log(` ${colors.green}✓ ${res.message}${colors.reset}`);
       console.log(
-        `   ${colors.dim}Mode:${colors.reset} ${colors.cyan}${options.mode ?? configuredMode}${colors.reset}\n`,
+        `   ${colors.dim}Mode:${colors.reset} ${colors.cyan}${activeMode}${colors.reset}\n`,
       );
       process.exit(0);
     } else {
@@ -60,9 +84,24 @@ export async function runHooks(action = "status", options: HooksOptions = {}): P
   }
 
   if (action === "uninstall") {
-    const res = await uninstallCommitMsgHook(repoRoot);
+    let res: { success: boolean; installed: boolean; message: string };
+
+    if (targetHook === "pre-commit") {
+      res = await uninstallPreCommitHook(repoRoot);
+    } else if (targetHook === "all") {
+      const res1 = await uninstallCommitMsgHook(repoRoot);
+      const res2 = await uninstallPreCommitHook(repoRoot);
+      res = {
+        success: res1.success && res2.success,
+        installed: res1.installed || res2.installed,
+        message: `${res1.message} | ${res2.message}`,
+      };
+    } else {
+      res = await uninstallCommitMsgHook(repoRoot);
+    }
+
     if (options.json) {
-      console.log(JSON.stringify(res, null, 2));
+      console.log(JSON.stringify({ ...res, hook: targetHook }, null, 2));
       process.exit(res.success ? 0 : 1);
     }
 
@@ -77,13 +116,21 @@ export async function runHooks(action = "status", options: HooksOptions = {}): P
   }
 
   // Action: status (default)
-  const status = await getHookStatus(repoRoot, "commit-msg");
+  const commitStatus = await getHookStatus(repoRoot, "commit-msg");
+  const preCommitStatus = await getHookStatus(repoRoot, "pre-commit");
+
   if (options.json) {
     console.log(
       JSON.stringify(
         {
-          ...status,
-          mode: configuredMode,
+          "commit-msg": {
+            ...commitStatus,
+            mode: config.hooks.commitMsg,
+          },
+          "pre-commit": {
+            ...preCommitStatus,
+            mode: config.hooks.preCommit,
+          },
         },
         null,
         2,
@@ -94,22 +141,26 @@ export async function runHooks(action = "status", options: HooksOptions = {}): P
 
   printHeader();
   console.log(` ${colors.bold}Git Hooks Status:${colors.reset}\n`);
-  const statusColor = status.installed ? colors.green : colors.dim;
-  const statusText = status.installed ? "Installed" : "Not Installed";
+
+  const commitStatusColor = commitStatus.installed ? colors.green : colors.dim;
+  const commitStatusText = commitStatus.installed ? "Installed" : "Not Installed";
   console.log(
-    `   ${colors.dim}commit-msg:${colors.reset}       ${statusColor}${statusText}${colors.reset}`,
+    `   ${colors.dim}commit-msg:${colors.reset}       ${commitStatusColor}${commitStatusText}${colors.reset}`,
   );
   console.log(
-    `   ${colors.dim}GitWhisper managed:${colors.reset} ${status.isGitWhisperManaged ? `${colors.green}Yes${colors.reset}` : `${colors.dim}No${colors.reset}`}`,
-  );
-  console.log(
-    `   ${colors.dim}Active policy mode:${colors.reset} ${colors.cyan}${configuredMode}${colors.reset}`,
-  );
-  console.log(
-    `   ${colors.dim}Hook file path:${colors.reset}     ${colors.dim}${status.hookPath}${colors.reset}\n`,
+    `   ${colors.dim}Policy mode:${colors.reset}      ${colors.cyan}${config.hooks.commitMsg}${colors.reset}`,
   );
 
-  if (!status.installed) {
+  const preCommitColor = preCommitStatus.installed ? colors.green : colors.dim;
+  const preCommitText = preCommitStatus.installed ? "Installed" : "Not Installed";
+  console.log(
+    `   ${colors.dim}pre-commit:${colors.reset}       ${preCommitColor}${preCommitText}${colors.reset} (AST Differential Guard)`,
+  );
+  console.log(
+    `   ${colors.dim}Guard mode:${colors.reset}       ${colors.cyan}${config.hooks.preCommit}${colors.reset}\n`,
+  );
+
+  if (!commitStatus.installed && !preCommitStatus.installed) {
     console.log(
       `   ${colors.dim}Run ${colors.bold}gitwhisper hooks install${colors.dim} to enable commit quality checks.${colors.reset}\n`,
     );

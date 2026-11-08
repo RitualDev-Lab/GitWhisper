@@ -155,6 +155,15 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
       continue;
     }
 
+    if (arg === "--hook" || arg.startsWith("--hook=")) {
+      const val = arg.includes("=") ? arg.split("=")[1] : argv[i + 1];
+      if (val === "commit-msg" || val === "pre-commit" || val === "all") {
+        hooksOptions.hook = val;
+      }
+      i += arg.includes("=") ? 1 : 2;
+      continue;
+    }
+
     if (arg === "--mode" || arg.startsWith("--mode=")) {
       const val = arg.includes("=") ? arg.split("=")[1] : argv[i + 1];
       if (val === "off" || val === "warn" || val === "strict") {
